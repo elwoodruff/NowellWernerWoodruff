@@ -19,7 +19,7 @@ FIRE_NAME: name of fire
 INC_NUM: unique coding for the specific incident
 ALARM_DATE: what day the fire was discovered
 CONT_DATE: what day the fire was contained
-GIS_ACRES: area the fire covered
+GIS_ACRES: area the fire covered (acres)
 d_CAUSE: cause of the fire
 d_OBJECTIVE: what is the objective of the fire management (wild fire suppression, controlled wildfire burn)
 COMMENTS: comments about the fire
@@ -32,7 +32,7 @@ d_UNIT_ID: location of the fire
 d_TREATMENT_TYPE: what type of burn was used for the prescribed burn
 START_DATE: day fire started
 END_DATE: day fire ended
-GIS_ACRES: area the fire covered
+GIS_ACRES: area the fire covered (acres)
 d_PRE_CON_CLASS: metric describing how much an ecosystem has departed from its historical natural fire regime, measured prior to the prescribed burn
 d_POST_CON_CLASS: metric describing how much an ecosystem has departed from its historical natural fire regime, measured following the prescribed burn
 d_RX_CONSUM: how much fuel a prescibed burn consumed
