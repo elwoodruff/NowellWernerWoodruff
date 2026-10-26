@@ -36,3 +36,4 @@ GIS_ACRES: area the fire covered (acres)
 d_PRE_CON_CLASS: metric describing how much an ecosystem has departed from its historical natural fire regime, measured prior to the prescribed burn
 d_POST_CON_CLASS: metric describing how much an ecosystem has departed from its historical natural fire regime, measured following the prescribed burn
 d_RX_CONSUM: how much fuel a prescibed burn consumed
+TREATMENT_ID: unique ID for the prescribed burn treatment
