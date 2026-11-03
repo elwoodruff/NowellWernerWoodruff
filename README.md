@@ -37,3 +37,8 @@ d_PRE_CON_CLASS: metric describing how much an ecosystem has departed from its h
 d_POST_CON_CLASS: metric describing how much an ecosystem has departed from its historical natural fire regime, measured following the prescribed burn
 d_RX_CONSUM: how much fuel a prescibed burn consumed
 TREATMENT_ID: unique ID for the prescribed burn treatment
+
+# AI Use Log
+**This log is for recording use of AI throughout the duration of the project.**
+**Week 3**
+- Monday 11/2/2026: Utilized Claude to vibe code template dashboard (html file currently in the scripts folder labeled dashboard_template.html).
