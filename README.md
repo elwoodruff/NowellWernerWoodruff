@@ -42,3 +42,4 @@ TREATMENT_ID: unique ID for the prescribed burn treatment
 **This log is for recording use of AI throughout the duration of the project.**
 **Week 3**
 - Monday 11/2/2026: Utilized Claude to vibe code template dashboard (html file currently in the scripts folder labeled dashboard_template.html).
+- Friday 11/6/2026: Utilized Claude and inline Copilot assist to code geospatial/geopandas workflow to spatially join and temporally filter rxburn vs fire data sets
