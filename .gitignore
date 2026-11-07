@@ -218,3 +218,19 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+data/raw/fire25_1.cpg
+data/raw/fire25_1.dbf
+data/raw/fire25_1.prj
+data/raw/fire25_1.sbn
+data/raw/fire25_1.sbx
+data/raw/fire25_1.shp
+data/raw/fire25_1.shp.xml
+data/raw/fire25_1.shx
+data/raw/rxburn25_1.cpg
+data/raw/rxburn25_1.dbf
+data/raw/rxburn25_1.prj
+data/raw/rxburn25_1.sbn
+data/raw/rxburn25_1.sbx
+data/raw/rxburn25_1.shp
+data/raw/rxburn25_1.shp.xml
+data/raw/rxburn25_1.shx
