@@ -1,11 +1,11 @@
 #Import packages
-from pathlib import Path
+from pathlib import Path, WindowsPath
 import pandas as pd
 import seaborn as sns
 from shiny import App, render, req, ui
 
-root_fldr = Path.cwd().parent
-raw_fldr = root_fldr / "data" / "raw"
+root_fldr = WindowsPath('C:/Users/agn25/OneDrive - Duke University/Documents/data')
+raw_fldr = root_fldr / "data" / "raw"  
 processed_fldr = root_fldr / "data" / "processed"
 
 fire25_csv = processed_fldr / "fire25_2000.csv"
