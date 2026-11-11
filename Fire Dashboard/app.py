@@ -10,9 +10,8 @@ from shiny import App, reactive, render, ui
 sns.set_theme(style="whitegrid", context="notebook", font_scale=1.05)
 
 # ---------------------------------------------------------------- Data
-root_fldr = WindowsPath(
-    "C:/Users/agn25/OneDrive - Duke University/Documents/NowellWernerWoodruff"
-)
+root_fldr = WindowsPath.cwd()
+
 processed_fldr = root_fldr / "data" / "processed"
 
 fire25 = pd.read_csv(processed_fldr / "fire25_2000.csv")
