@@ -10,8 +10,8 @@ Nick Werner
 Scope:
 Our project aims to look at the factors that impact the destruction, scale and speed of fires in California from variables such as cause and location. We want our project to be an accessable dashboard that has a target audience of non-academic residents of California to spread awareness of what actually leads to these fires.
 
-Data dictionary:
-Fire 25
+# Data dictionary:
+## Fire 25
 YEAR_: describes what year the fire occurred
 d_AGENCY: who is responsible for the land/containing the fire
 d_UNIT_ID: location of the fire
@@ -25,7 +25,7 @@ d_OBJECTIVE: what is the objective of the fire management (wild fire suppression
 COMMENTS: comments about the fire
 d_C_METHOD: containment method
 
-Rx Burn
+## Rx Burn
 YEAR_: year of the burn
 d_AGENCY: who is responsible for the land/containing the fire
 d_UNIT_ID: location of the fire
@@ -37,6 +37,19 @@ d_PRE_CON_CLASS: metric describing how much an ecosystem has departed from its h
 d_POST_CON_CLASS: metric describing how much an ecosystem has departed from its historical natural fire regime, measured following the prescribed burn
 d_RX_CONSUM: how much fuel a prescibed burn consumed
 TREATMENT_ID: unique ID for the prescribed burn treatment
+
+# Instructions for Recreating Analysis
+Coding Environment Includes:
+pandas, geopandas, seaborn, PathsLib, statsmodels, shiny
+1. Mantain all folder and file structure
+2. Run dataanalisis.ipynb, first clearing all outputs and running all cells
+3. For geospatial anlysis (though unnecessary with included cleaned fire_rxbrun_25.csv), external download of fire25 and rxburn shapefiles is necessary. Then run spatialanalysis.ipynb
+
+# Instructions for Opening Dashboard
+1. Download the ZIP File with all of the data and the app in it
+2. Unzip the file and be sure to keep everything formatted in the way it was 
+3. Make sure you have the Shiny extension installed on VSCode
+4. Open the file in VSCode and open the app.py file, from there just click the play button drop down that choose “Debug Shiny App”, it should pop up in a different window of VSCode and have two widgets with a dropdown and year selector each along with two figures with summary tables below 
 
 # AI Use Log
 **This log is for recording use of AI throughout the duration of the project.**
