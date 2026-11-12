@@ -153,7 +153,7 @@ app_ui = ui.page_fluid(
             full_screen=True,
         ),
         ui.card(
-            ui.card_header("Prescribed Burn Within a Year"),
+            ui.card_header("Prescribed Burn Within 5 Years"),
             ui.layout_columns(
                 ui.input_slider(
                     "date_slider_rx", "Year range:",
@@ -212,13 +212,13 @@ def server(input, output, session):
         metric = input.dropdown_rx()
         return _summary_bar(
             rx_df(), "rx_within_window", metric,
-            xlabel="Prescribed Burn Within a Year",
+            xlabel="Prescribed Burn Within 5 Years",
             title=f"{METRIC_LABELS[metric]} by Prior Prescribed Burn, {int(start)}–{int(end)}",
         )
 
     @render.table
     def rx_table():
-        return format_table(rx_df(), "rx_within_window", "Prescribed Burn Within a Year")
+        return format_table(rx_df(), "rx_within_window", "Prescribed Burn Within 5 Years")
 
 
 app = App(app_ui, server)
