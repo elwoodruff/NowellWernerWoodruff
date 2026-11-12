@@ -1,5 +1,5 @@
 # Import packages
-from pathlib import Path, WindowsPath
+from pathlib import WindowsPath
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -10,7 +10,8 @@ from shiny import App, reactive, render, ui
 sns.set_theme(style="whitegrid", context="notebook", font_scale=1.05)
 
 # ---------------------------------------------------------------- Data
-root_fldr = Path(__file__).parent
+root_fldr = WindowsPath.cwd()
+
 processed_fldr = root_fldr / "data" / "processed"
 
 fire25 = pd.read_csv(processed_fldr / "fire25_2000.csv")
@@ -127,38 +128,25 @@ def _summary_bar(summary, x, metric, xlabel, title):
 min_year = int(fire25["YEAR"].min())
 max_year = int(fire25["YEAR"].max())
 
-app_ui = ui.page_sidebar(
-    ui.sidebar(
-        ui.h4("Causes of Fires"),
-        ui.input_slider(
-            "date_slider_cause", "Year range:",
-            min=min_year, max=max_year,
-            value=(min_year, max_year),
-            step=1, sep="",  # sep="" removes the thousands comma
-        ),
-        ui.input_select(
-            "dropdown_cause", "Measure:",
-            choices=METRIC_LABELS,
-            selected="mean_area_burned",
-        ),
-        ui.hr(),
-        ui.h4("Prescribed Burns"),
-        ui.input_slider(
-            "date_slider_rx", "Year range:",
-            min=min_year, max=max_year,
-            value=(min_year, max_year),
-            step=1, sep="",
-        ),
-        ui.input_select(
-            "dropdown_rx", "Measure:",
-            choices=METRIC_LABELS,
-            selected="mean_area_burned",
-        ),
-        width=320,
-    ),
+app_ui = ui.page_fluid(
+    ui.h2("California Fire Dashboard", class_="my-3"),
     ui.layout_columns(
         ui.card(
             ui.card_header("Causes of Fires in California"),
+            ui.layout_columns(
+                ui.input_slider(
+                    "date_slider_cause", "Year range:",
+                    min=min_year, max=max_year,
+                    value=(min_year, max_year),
+                    step=1, sep="",  # sep="" removes the thousands comma
+                ),
+                ui.input_select(
+                    "dropdown_cause", "Measure:",
+                    choices=METRIC_LABELS,
+                    selected="mean_area_burned",
+                ),
+                col_widths=(8, 4),
+            ),
             ui.output_plot("cause_plot", height="500px"),
             ui.h6("Summary by Cause", class_="mt-3"),
             ui.output_table("cause_table"),
@@ -166,6 +154,20 @@ app_ui = ui.page_sidebar(
         ),
         ui.card(
             ui.card_header("Prescribed Burn Within a Year"),
+            ui.layout_columns(
+                ui.input_slider(
+                    "date_slider_rx", "Year range:",
+                    min=min_year, max=max_year,
+                    value=(min_year, max_year),
+                    step=1, sep="",
+                ),
+                ui.input_select(
+                    "dropdown_rx", "Measure:",
+                    choices=METRIC_LABELS,
+                    selected="mean_area_burned",
+                ),
+                col_widths=(8, 4),
+            ),
             ui.output_plot("rx_plot", height="500px"),
             ui.h6("Summary by Prescribed Burn", class_="mt-3"),
             ui.output_table("rx_table"),
@@ -174,7 +176,6 @@ app_ui = ui.page_sidebar(
         col_widths=(12, 12),
     ),
     title="California Fire Dashboard",
-    fillable=False,
 )
 
 
@@ -211,13 +212,13 @@ def server(input, output, session):
         metric = input.dropdown_rx()
         return _summary_bar(
             rx_df(), "rx_within_window", metric,
-            xlabel="Prescribed Burn Within Five Years",
+            xlabel="Prescribed Burn Within a Year",
             title=f"{METRIC_LABELS[metric]} by Prior Prescribed Burn, {int(start)}–{int(end)}",
         )
 
     @render.table
     def rx_table():
-        return format_table(rx_df(), "rx_within_window", "Prescribed Burn Within Five Years")
+        return format_table(rx_df(), "rx_within_window", "Prescribed Burn Within a Year")
 
 
 app = App(app_ui, server)
