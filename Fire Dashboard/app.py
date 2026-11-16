@@ -13,7 +13,7 @@ sns.set_theme(style="whitegrid", context="notebook", font_scale=1.05)
 
 # ---------------------------------------------------------------- Data
 root_fldr = Path(__file__).parent
-raw_fldr = root_fldr.parent / "data" 
+raw_fldr = root_fldr.parent / "data" / 'raw'
 processed_fldr = root_fldr / "data" / "processed"
 
 fire25 = pd.read_csv(processed_fldr / "fire25_2000.csv")
