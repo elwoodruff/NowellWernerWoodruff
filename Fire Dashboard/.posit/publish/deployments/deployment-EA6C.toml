@@ -10,16 +10,15 @@ id = "01a1e4b6-bafe-7ee9-3298-e7b96a7e8b14"
 dashboard_url = "https://connect.posit.cloud/agnowell25/content/01a1e4b6-bafe-7ee9-3298-e7b96a7e8b14"
 direct_url = "https://01a1e4b6-bafe-7ee9-3298-e7b96a7e8b14.share.connect.posit.cloud"
 logs_url = "https://connect.posit.cloud/agnowell25/content/01a1e4b6-bafe-7ee9-3298-e7b96a7e8b14/history"
-deployed_at = "2026-11-16T14:20:44.269Z"
-bundle_id = "01a1e4bb-1b42-aef7-181f-23aee601fb1d"
+deployed_at = "2026-11-16T14:31:12.279Z"
+bundle_id = "01a1e4c4-7071-e897-3855-0fe6fdb4574e"
 files = [
     ".posit/publish/Fire Dashboard-C6QN.toml",
     ".posit/publish/deployments/deployment-EA6C.toml",
     "app.py",
-    "data/processed/fire25.zip",
     "data/processed/fire25_2000.csv",
     "data/processed/fire_rxburn_25.csv",
-    "data/processed/rxburn25.zip",
+    "data/processed/rxburn25_2000.csv",
     "data/raw/fire25.zip",
     "data/raw/fire25_1.csv",
     "data/raw/fire_25_TD.csv",
@@ -36,7 +35,8 @@ requirements = [
     "matplotlib\r",
     "seaborn\r",
     "geopandas\r",
-    "folium",
+    "folium\r",
+    "mapclassify",
 ]
 
 [connect_cloud]
@@ -59,9 +59,4 @@ product_type = "connect_cloud"
 
 [configuration.python]
 version = "3.12"
-
-[deployment_error]
-code = "deployFailed"
-message = "Runtime error: Unable to start the app due to a runtime error. Please check the logs for more information."
-operation = "publish"
 
