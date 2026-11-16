@@ -13,7 +13,7 @@ sns.set_theme(style="whitegrid", context="notebook", font_scale=1.05)
 
 # ---------------------------------------------------------------- Data
 root_fldr = Path(__file__).parent
-
+raw_fldr = root_fldr.parent / "data" 
 processed_fldr = root_fldr / "data" / "processed"
 
 fire25 = pd.read_csv(processed_fldr / "fire25_2000.csv")
@@ -31,7 +31,7 @@ fire_rxburn["GIS_ACRES"] = pd.to_numeric(fire_rxburn["GIS_ACRES"], errors="coerc
 fire_rxburn["duration"] = (fire_rxburn["CONT_DATE"] - fire_rxburn["ALARM_DATE"]).dt.total_seconds() / 3600
 
 # Map layers (raw shapefiles live in the project's data/raw folder)
-raw_fldr = root_fldr.parent / "data" / "raw"
+
 fire_gdf = gpd.read_file(raw_fldr / "fire25.zip")
 rxburn_gdf = gpd.read_file(raw_fldr / "rxburn25.zip")
 
