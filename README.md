@@ -60,4 +60,4 @@ pandas, geopandas, seaborn, PathsLib, statsmodels, shiny
 -Monday 11/9/2026: Utilized Claude to debug shiny app code and improving layout once code was completed
 **Week 5**
 - Sunday 11/15/2026: Utilized Claude to assist with interactive map implementation to dashboard
-- Monday 11/16/2026: Utilized Claude to help with deugging of spatial analysis issue finding that we filtered for perscribed burns after fires.
+- Monday 11/16/2026: Utilized Claude to help with deugging of spatial analysis issue finding that we filtered for perscribed burns after fires and to help build out code for specific statistical testing (chi-square, two-sided exact binomial, Welch t test)
