@@ -242,8 +242,6 @@ def make_fire_map(fires, rx, start_date, end_date, causes=None, show_fires=True,
             tooltip=["AGENCY", "START", "END", "ACRES"],
         )
         legend += _legend_row("blue", "Prescribed burn")
-    legend = ""
-
 
     if legend:
         m.get_root().html.add_child(folium.Element(
