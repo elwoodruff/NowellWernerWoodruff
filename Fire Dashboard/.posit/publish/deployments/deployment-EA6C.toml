@@ -10,8 +10,8 @@ id = "01a1e4b6-bafe-7ee9-3298-e7b96a7e8b14"
 dashboard_url = "https://connect.posit.cloud/agnowell25/content/01a1e4b6-bafe-7ee9-3298-e7b96a7e8b14"
 direct_url = "https://01a1e4b6-bafe-7ee9-3298-e7b96a7e8b14.share.connect.posit.cloud"
 logs_url = "https://connect.posit.cloud/agnowell25/content/01a1e4b6-bafe-7ee9-3298-e7b96a7e8b14/history"
-deployed_at = "2026-11-16T14:31:12.279Z"
-bundle_id = "01a1e4c4-7071-e897-3855-0fe6fdb4574e"
+deployed_at = "2026-11-17T19:27:57.489Z"
+bundle_id = "01a1eafa-7f6e-59df-e064-df35dcaf40a2"
 files = [
     ".posit/publish/Fire Dashboard-C6QN.toml",
     ".posit/publish/deployments/deployment-EA6C.toml",
