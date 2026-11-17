@@ -8,6 +8,7 @@ import pandas as pd
 import seaborn as sns
 from matplotlib.ticker import FuncFormatter
 from shiny import App, reactive, render, ui
+from matplotlib.ticker import FuncFormatter, MaxNLocator
 
 sns.set_theme(style="whitegrid", context="notebook", font_scale=1.05)
 
@@ -45,6 +46,42 @@ fire_gdf = fire_gdf[fire_gdf["YEAR_"] >= 2000]
 rxburn_gdf = rxburn_gdf[rxburn_gdf["YEAR_"] >= 2000]
 fire_gdf["geometry"] = fire_gdf.geometry.simplify(100)
 rxburn_gdf["geometry"] = rxburn_gdf.geometry.simplify(100)
+
+fire25_long = raw_fldr / "fire_25_TD.csv"
+fire25long = pd.read_csv(fire25_long)
+fire25long = fire25long.loc[:,['YEAR_', 'd_AGENCY', 'd_UNIT_ID', 'FIRE_NAME', 'INC_NUM', 'ALARM_DATE', 'CONT_DATE', 'GIS_ACRES', 'd_CAUSE', 'd_C_METHOD', 'd_OBJECTIVE', 'COMMENTS']]
+
+fire25long['YEAR_'] = fire25long['YEAR_'].astype('Int64')
+fire25long['ALARM_DATE'] = pd.to_datetime(fire25long['ALARM_DATE'],format='%m/%d/%Y %H:%M:%S')
+fire25long['CONT_DATE'] = pd.to_datetime(fire25long['CONT_DATE'],format='%m/%d/%Y %H:%M:%S')
+fire25long = fire25long.rename(
+    columns={
+        'YEAR_': 'YEAR',
+        'd_AGENCY': 'AGENCY',
+        'd_UNIT_ID': 'UNIT_ID',
+        'd_CAUSE': 'CAUSE',
+        'd_OBJECTIVE': 'OBJECTIVE',
+        'd_C_METHOD': 'C_METHOD'
+    }
+)
+fire25long = fire25long.loc[fire25_long['YEAR'] >= 1900]
+year_summary_long = (
+    fire25long.groupby("YEAR")
+    .agg(
+        count=("YEAR", "count"),
+        mean_area_burned=("GIS_ACRES", "mean"),
+        total_area_burned=("GIS_ACRES", "sum"),
+    )
+    .reset_index()
+    .sort_values("YEAR")
+)
+year_summary_long["YEAR"] = year_summary_long["YEAR"].astype(int)
+
+# Choices for the new dropdown (reuses the existing labels)
+YEAR_METRICS = {
+    "total_area_burned": "Total Area Burned (acres)",
+    "mean_area_burned": "Mean Area Burned (acres)",
+}
 
 KNOWN_EXCLUDE = ["Unknown / Unidentified", "Miscellaneous"]
 
@@ -154,6 +191,18 @@ def _summary_bar(summary, x, metric, xlabel, title):
     fig.tight_layout()
     return fig
 
+def year_line(df, metric, title):
+    if df.empty:
+        return _empty_plot("No data available")
+    fig, ax = plt.subplots(figsize=(10, 5.5))
+    sns.lineplot(
+        data=df, x="YEAR", y=metric,
+        marker="o", color=sns.color_palette("magma")[3], ax=ax,
+    )
+    ax.xaxis.set_major_locator(MaxNLocator(integer=True))
+    _style_axes(ax, "Year", METRIC_LABELS[metric], title)
+    fig.tight_layout()
+    return fig
 
 # ---------------------------------------------------------------- Map
 def make_fire_map(fires, rx, start_date, end_date, causes=None, show_fires=True, show_rx=True):
@@ -262,6 +311,16 @@ app_ui = ui.page_fluid(
             full_screen=True,
         ),
         ui.card(
+            ui.card_header("Area Burned by Year"),
+            ui.input_select(
+                "dropdown_year", "Measure:",
+                choices=YEAR_METRICS,
+                selected="total_area_burned",
+            ),
+            ui.output_plot("year_plot", height="500px"),
+            full_screen=True,
+        ),
+        ui.card(
             ui.card_header("Fire Duration and Prescribed Burns Map"),
             ui.layout_columns(
                 ui.input_date_range(
@@ -282,7 +341,7 @@ app_ui = ui.page_fluid(
             ui.output_ui("fire_map"),
             full_screen=True,
         ),
-        col_widths=(12, 12, 12),
+        col_widths=(12, 12, 12, 12),
     ),
     title="California Fire Dashboard",
 )
@@ -328,7 +387,13 @@ def server(input, output, session):
     @render.table
     def rx_table():
         return format_table(rx_df(), "rx_within_window", "Prescribed Burn Within 5 Years")
-
+    @render.plot
+    def year_plot():
+        metric = input.dropdown_year()
+        return year_line(
+            year_summary_long, metric,
+            title=f"{METRIC_LABELS[metric]} by Year",
+        )
     @render.ui
     def fire_map():
         start, end = input.map_dates()
