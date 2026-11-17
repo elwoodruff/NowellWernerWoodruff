@@ -23,6 +23,7 @@ fire25["YEAR"] = pd.to_numeric(fire25["YEAR"], errors="coerce")
 fire25["GIS_ACRES"] = pd.to_numeric(fire25["GIS_ACRES"], errors="coerce")
 fire25["DURATION"] = (fire25["CONT_DATE"] - fire25["ALARM_DATE"]).dt.total_seconds() / 3600
 
+
 fire_rxburn = pd.read_csv(processed_fldr / "fire_rxburn_25.csv")
 fire_rxburn["ALARM_DATE"] = pd.to_datetime(fire_rxburn["ALARM_DATE"], format="%Y-%m-%d", errors="coerce")
 fire_rxburn["CONT_DATE"] = pd.to_datetime(fire_rxburn["CONT_DATE"], format="%Y-%m-%d", errors="coerce")
@@ -44,6 +45,8 @@ fire_gdf = fire_gdf[fire_gdf["YEAR_"] >= 2000]
 rxburn_gdf = rxburn_gdf[rxburn_gdf["YEAR_"] >= 2000]
 fire_gdf["geometry"] = fire_gdf.geometry.simplify(100)
 rxburn_gdf["geometry"] = rxburn_gdf.geometry.simplify(100)
+
+KNOWN_EXCLUDE = ["Unknown / Unidentified", "Miscellaneous"]
 
 # ------------------------------------------------------------- Labels
 # Dictionary keys are the column names; values are what the user sees.
@@ -74,6 +77,17 @@ def _summarize(df, group_col, duration_col, metric):
         .reset_index()
     )
 
+def known_cause_summary(df, metric):
+    """Natural (lightning) vs. human-caused, among fires with a known cause."""
+    known = df.loc[~df["CAUSE"].isin(KNOWN_EXCLUDE)]
+    if known.empty:
+        return known.iloc[0:0]
+    known = known.assign(
+        GROUP=known["CAUSE"].eq("Lightning").map(
+            {True: "Natural (known causes)", False: "Human-caused (known causes)"}
+        )
+    )
+    return _summarize(known, "GROUP", "DURATION", metric).rename(columns={"GROUP": "CAUSE"})
 
 def cause_summary(start_year, end_year, metric):
     df = fire25.loc[(fire25["YEAR"] >= start_year) & (fire25["YEAR"] <= end_year)]
@@ -81,8 +95,8 @@ def cause_summary(start_year, end_year, metric):
         return df.iloc[0:0]
     summary = _summarize(df, "CAUSE", "DURATION", metric)
     summary["CAUSE"] = summary["CAUSE"].astype(str)
-    return summary
-
+    summary = pd.concat([summary, known_cause_summary(df, metric)], ignore_index=True)
+    return summary.sort_values(by=metric, ascending=False).reset_index(drop=True)
 
 def rx_summary(start_year, end_year, metric):
     df = fire_rxburn.loc[
@@ -160,20 +174,25 @@ def make_fire_map(fires, rx, start_date, end_date, causes=None, show_fires=True,
     colors = ["#fed976", "#feb24c", "#fd8d3c", "#e31a1c", "#800026", "#bdbdbd"]
     fires = fires.assign(DURATION=pd.cut(fires["DURATION_DAYS"], [-1, 0, 3, 7, 30, float("inf")], labels=labels[:-1])
                          .cat.add_categories("Unknown").fillna("Unknown"))
+    
+    fires = fires.rename(columns={"GIS_ACRES": "ACRES", "CONT_DATE": "CONTAINMENT", "DURATION_DAYS": "DAYS", "FIRE_NAME": "NAME", "ALARM_DATE": "ALARM"})
+    rx = rx.rename(columns={"GIS_ACRES": "ACRES", "START_DATE": "START", "END_DATE": "END", "TREATMENT1": "TREATMENT"})
 
     legend = ""
     if show_fires:
         fires.explore(
             m=m, name="Fires", column="DURATION", cmap=colors, legend=False,
-            tooltip=["FIRE_NAME", "CAUSE", "ALARM_DATE", "CONT_DATE", "DURATION_DAYS", "GIS_ACRES"],
+            tooltip=["NAME", "CAUSE", "ALARM", "CONTAINMENT", "DAYS", "ACRES"],
         )
         legend += "<b>Fire duration</b>" + "".join(_legend_row(c, l) for l, c in zip(labels, colors))
     if show_rx:
         rx.explore(
             m=m, name="Prescribed burns", color="blue",
-            tooltip=["TREATMENT1", "START_DATE", "END_DATE", "GIS_ACRES"],
+            tooltip=["AGENCY", "START", "END", "ACRES"],
         )
         legend += _legend_row("blue", "Prescribed burn")
+    legend = ""
+
 
     if legend:
         m.get_root().html.add_child(folium.Element(
