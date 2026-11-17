@@ -64,7 +64,9 @@ fire25long = fire25long.rename(
         'd_C_METHOD': 'C_METHOD'
     }
 )
-fire25long = fire25long.loc[fire25_long['YEAR'] >= 1900]
+
+fire25long = fire25long.loc[fire25long['YEAR'] >= 1900]
+
 year_summary_long = (
     fire25long.groupby("YEAR")
     .agg(
