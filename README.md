@@ -61,3 +61,4 @@ pandas, geopandas, seaborn, PathsLib, statsmodels, shiny
 **Week 5**
 - Sunday 11/15/2026: Utilized Claude to assist with interactive map implementation to dashboard
 - Monday 11/16/2026: Utilized Claude to help with deugging of spatial analysis issue finding that we filtered for perscribed burns after fires and to help build out code for specific statistical testing (chi-square, two-sided exact binomial, Welch t test)
+-Tuesday 11/17/2026: Utilized Claude to improve labeling on the dashboard and debug issues with adding new figures to dashboard
